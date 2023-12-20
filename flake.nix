@@ -42,6 +42,7 @@
               gradle
               kotlin
               kotlin-language-server
+              ktlint
               ncurses
               patchelf
               zlib
