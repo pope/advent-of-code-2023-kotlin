@@ -8,24 +8,24 @@ import kotlin.math.max
 data class Game(val id: Int, val views: List<IntArray>)
 
 fun main() {
-	part1()
-	part2()
+	val lines = object {}.javaClass.getResourceAsStream("/input.txt")!!.bufferedReader().readLines()
+	val games = lines.map { processLine(it) }
+	part1(games)
+	part2(games)
 }
 
-fun part1() {
-	val lines = object {}.javaClass.getResourceAsStream("/input.txt")!!.bufferedReader().readLines()
+fun part1(games: List<Game>) {
 	val sum =
-		lines.asSequence().map { processLine(it) }.filter { game ->
-			game.views.all { it[0] <= 12 && it[1] <= 13 && it[2] <= 14 }
-		}.map { it.id }.sum()
+		games
+			.filter { game -> game.views.all { it[0] <= 12 && it[1] <= 13 && it[2] <= 14 } }
+			.map { it.id }
+			.sum()
 	println("Part 1: " + sum)
 }
 
-fun part2() {
-	val lines = object {}.javaClass.getResourceAsStream("/input.txt")!!.bufferedReader().readLines()
+fun part2(games: List<Game>) {
 	val sum =
-		lines.asSequence()
-			.map { processLine(it) }
+		games
 			.map { game ->
 				var r = 1
 				var g = 1
@@ -36,7 +36,8 @@ fun part2() {
 					b = max(dice[2], b)
 				}
 				r * g * b
-			}.sum()
+			}
+			.sum()
 	println("Part 2: " + sum)
 }
 
@@ -74,7 +75,9 @@ fun processLine(line: String): Game {
 
 		views.add(dice)
 	} while (isGameContinued(t))
-		
+
+	assert(t.nextToken() == StreamTokenizer.TT_EOF)
+
 	return Game(gameId, views)
 }
 
